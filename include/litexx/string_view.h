@@ -44,7 +44,7 @@ namespace litexx {
         constexpr basic_string_view(pointer nstr, size_type size) noexcept : _begin(nstr), _end(nstr + size) {}
         constexpr basic_string_view(pointer zstr) : _begin(zstr), _end(zstr != nullptr ? zstr + litexx::char_traits<T>::length(zstr) : zstr) {}
 
-        template <typename S, typename = decltype()>
+        template <typename S>
         constexpr basic_string_view(S const& str) : _begin(str.data(), _end(_begin + str.size())) {}
 
         constexpr pointer data() const noexcept { return _begin; }
