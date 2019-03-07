@@ -34,7 +34,7 @@ if(has_builtin_char_only)
         message(STATUS "[litexx] Using string builtins for char only")
     endif()
     target_compile_definitions(litexx INTERFACE
-        LITEXX_USE_BUILTIN_STRLEN_CHAR
+        LITEXX_USE_STRING_BUILTIN_CHAR_ONLY
     )
 else()
     if(LITEXX_BUILD_VERBOSE)

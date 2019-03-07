@@ -56,7 +56,7 @@ namespace litexx {
         }
     };
 
-#if defined(LITEXX_USE_BUILTIN_STRLEN_CHAR)
+#if defined(LITEXX_USE_STRING_BUILTIN_CHAR_ONLY)
     template <>
     struct char_traits<char> {
         using char_type = char;

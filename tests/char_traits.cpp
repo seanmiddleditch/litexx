@@ -1,7 +1,7 @@
 #include "litexx/char_traits.h"
 #include <doctest/doctest.h>
 
-#if defined(LITEXX_USE_BUILTIN_STRLEN_CHAR)
+#if defined(LITEXX_USE_STRING_BUILTIN_CHAR_ONLY)
 static_assert(litexx::char_traits<char>::length("test") == 4, "constexpr char_traits::length failed");
 #endif
 
@@ -21,7 +21,6 @@ DOCTEST_TEST_CASE("char_traits<char>") {
         char abc[] = "abc";
         char abcdef[] = "abcdef";
         char abcghi[] = "abcghi";
-
 
         DOCTEST_CHECK_EQ(0, char_traits<char>::compare(abc, abcdef, 3));
         DOCTEST_CHECK_EQ(0, char_traits<char>::compare(abcdef, abcghi, 3));
