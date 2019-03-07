@@ -28,6 +28,10 @@
 // Authors:
 //   Sean Middleditch <sean@middleditch.us>
 
+#if !defined(_guard_LITEXX_STRING_VIEW_H)
+#define _guard_LITEXX_STRING_VIEW_H
+#pragma once
+
 #include "litexx/char_traits.h"
 
 namespace litexx {
@@ -94,3 +98,5 @@ namespace litexx {
 
     using string_view = basic_string_view<char>;
 } // namespace litexx
+
+#endif // !defined(_guard_LITEXX_STRING_VIEW_H)

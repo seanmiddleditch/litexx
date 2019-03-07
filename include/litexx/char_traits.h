@@ -28,6 +28,10 @@
 // Authors:
 //   Sean Middleditch <sean@middleditch.us>
 
+#if !defined(_guard_LITEXX_CHAR_TRAITS_H)
+#define _guard_LITEXX_CHAR_TRAITS_H
+#pragma once
+
 #include <cstddef>
 
 namespace litexx {
@@ -71,3 +75,5 @@ namespace litexx {
     };
 #endif
 }
+
+#endif // !defined(_guard_LITEXX_CHAR_TRAITS_H)
