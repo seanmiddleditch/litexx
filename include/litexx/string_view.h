@@ -33,8 +33,20 @@
 #pragma once
 
 #include "litexx/char_traits.h"
+#include "litexx/type_traits.h"
 
 namespace litexx {
+    namespace _detail {
+        template <typename, typename = void>
+        struct has_string_members { static constexpr bool value = false; };
+
+        template <typename T>
+        struct has_string_members<T, void_t<decltype(declval<T>().data()), decltype(declval<T>().size())>> { static constexpr bool value = true; };
+
+        template <typename T>
+        constexpr bool is_string_v = has_string_members<T>::value;
+    }
+
     template <typename T>
     class basic_string_view {
     public:
@@ -46,10 +58,10 @@ namespace litexx {
         constexpr basic_string_view() noexcept = default;
         constexpr basic_string_view(const_iterator first, const_iterator last) noexcept : _begin(first), _end(last) {}
         constexpr basic_string_view(pointer nstr, size_type size) noexcept : _begin(nstr), _end(nstr + size) {}
-        constexpr basic_string_view(pointer zstr) : _begin(zstr), _end(zstr != nullptr ? zstr + litexx::char_traits<T>::length(zstr) : zstr) {}
+        constexpr basic_string_view(pointer zstr) noexcept : _begin(zstr), _end(zstr != nullptr ? zstr + litexx::char_traits<T>::length(zstr) : zstr) {}
 
-        template <typename S>
-        constexpr basic_string_view(S const& str) : _begin(str.data(), _end(_begin + str.size())) {}
+        template <typename S, typename = enable_if_t<_detail::is_string_v<S>>>
+        constexpr basic_string_view(S const& str) noexcept : _begin(str.data()), _end(_begin + str.size()) {}
 
         constexpr pointer data() const noexcept { return _begin; }
         constexpr size_type size() const noexcept { return _end - _begin; }

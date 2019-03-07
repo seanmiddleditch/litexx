@@ -1,5 +1,7 @@
 #include "litexx/string_view.h"
 #include <doctest/doctest.h>
+#include <string>
+#include <string_view>
 
 DOCTEST_TEST_CASE("string_view") {
     using namespace litexx;
@@ -31,8 +33,11 @@ DOCTEST_TEST_CASE("string_view") {
     }
 
     DOCTEST_SUBCASE("ctad") {
+        char strghi[] = "abc";
+
         basic_string_view abc = "abc";
         basic_string_view def{"def", 3};
+        basic_string_view ghi = strghi;
     }
 
     DOCTEST_SUBCASE("comparison") {
@@ -45,5 +50,16 @@ DOCTEST_TEST_CASE("string_view") {
 
         DOCTEST_CHECK_LT(abc, abcdef);
         DOCTEST_CHECK_LT(abcdef, abcghi);
+    }
+
+    DOCTEST_SUBCASE("conversion") {
+        std::string str = "abc";
+        std::string_view sv = str;
+
+        static_assert(_detail::is_string_v<std::string>);
+        static_assert(_detail::is_string_v<std::string_view>);
+
+        basic_string_view<char> bv(str);
+        basic_string_view<char> bv2(sv);
     }
 }
