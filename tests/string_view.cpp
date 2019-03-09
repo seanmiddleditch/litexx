@@ -18,6 +18,7 @@ DOCTEST_TEST_CASE("string_view") {
 
     DOCTEST_SUBCASE("literal") {
         string_view literal = "literal";
+
         DOCTEST_CHECK(!literal.empty());
         DOCTEST_CHECK(literal);
         DOCTEST_CHECK_EQ(7, literal.size());
@@ -27,7 +28,7 @@ DOCTEST_TEST_CASE("string_view") {
     }
 
     DOCTEST_SUBCASE("length") {
-        string_view length{"length", 6};
+        constexpr string_view length{"length", 6};
 
         DOCTEST_CHECK_EQ(6, length.size());
     }
@@ -61,5 +62,14 @@ DOCTEST_TEST_CASE("string_view") {
 
         basic_string_view<char> bv(str);
         basic_string_view<char> bv2(sv);
+    }
+
+    DOCTEST_SUBCASE("wide") {
+        basic_string_view wide = L"test";
+        constexpr basic_string_view cwide{L"test", 4};
+
+        DOCTEST_CHECK_EQ(4, wide.size());
+        DOCTEST_CHECK_EQ(4, cwide.size());
+        DOCTEST_CHECK_EQ(cwide, wide);
     }
 }

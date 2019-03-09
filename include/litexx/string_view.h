@@ -56,49 +56,45 @@ namespace litexx {
         using const_iterator = pointer;
 
         constexpr basic_string_view() noexcept = default;
-        constexpr basic_string_view(const_iterator first, const_iterator last) noexcept : _begin(first), _end(last) {}
-        constexpr basic_string_view(pointer nstr, size_type size) noexcept : _begin(nstr), _end(nstr + size) {}
-        constexpr basic_string_view(pointer zstr) noexcept : _begin(zstr), _end(zstr != nullptr ? zstr + litexx::char_traits<T>::length(zstr) : zstr) {}
+        constexpr basic_string_view(const_iterator first, const_iterator last) noexcept : _data(first), _size(last - first) {}
+        constexpr basic_string_view(pointer nstr, size_type size) noexcept : _data(nstr), _size(size) {}
+        constexpr basic_string_view(pointer zstr) noexcept : _data(zstr), _size(zstr != nullptr ? litexx::char_traits<T>::length(zstr) : 0) {}
 
         template <typename S, typename = enable_if_t<_detail::is_string_v<S>>>
-        constexpr basic_string_view(S const& str) noexcept : _begin(str.data()), _end(_begin + str.size()) {}
+        constexpr basic_string_view(S const& str) noexcept : _data(str.data()), _size(str.size()) {}
 
-        constexpr pointer data() const noexcept { return _begin; }
-        constexpr size_type size() const noexcept { return _end - _begin; }
+        constexpr pointer data() const noexcept { return _data; }
+        constexpr size_type size() const noexcept { return _size; }
 
-        [[nodiscard]] constexpr bool empty() const noexcept { return _begin == _end; }
-        constexpr explicit operator bool() const noexcept { return _begin != _end; }
+        [[nodiscard]] constexpr bool empty() const noexcept { return _size == 0; }
+        constexpr explicit operator bool() const noexcept { return _size != 0; }
 
-        constexpr const_iterator begin() const noexcept { return _begin; }
-        constexpr const_iterator end() const noexcept { return _end; }
+        constexpr const_iterator begin() const noexcept { return _data; }
+        constexpr const_iterator end() const noexcept { return _data + _size; }
 
-        constexpr value_type operator[](size_type index) const noexcept { return _begin[index]; }
+        constexpr value_type operator[](size_type index) const noexcept { return _data[index]; }
 
         constexpr basic_string_view substr(size_type first, size_type length) const noexcept {
-            return basic_string_view(_begin + first, _begin + first + length);
+            return basic_string_view(_data + first, _data + first + length);
         }
 
         constexpr bool operator==(basic_string_view rhs) const noexcept {
-            size_type length = _end - _begin;
-            return length == rhs._end - rhs._begin && litexx::char_traits<T>::compare(_begin, rhs._begin, length) == 0;
+            return _size == rhs._size && litexx::char_traits<T>::compare(_data, rhs._data, _size) == 0;
         }
 
         constexpr bool operator!=(basic_string_view rhs) const noexcept {
-            size_type length = _end - _begin;
-            return length != rhs._end - rhs._begin || litexx::char_traits<T>::compare(_begin, rhs._begin, length) != 0;
+            return _size != rhs._size || litexx::char_traits<T>::compare(_data, rhs._data, _size) != 0;
         }
 
         constexpr bool operator<(basic_string_view rhs) const noexcept {
-            size_type length = _end - _begin;
-            size_type other_length = rhs._end - rhs._begin;
-            size_type min_length = length < other_length ? length : other_length;
-            int rs = litexx::char_traits<T>::compare(_begin, rhs._begin, min_length);
-            return rs < 0 || rs == 0 && length < other_length;
+            size_type min_size = _size < rhs._size ? _size : _size;
+            int rs = litexx::char_traits<T>::compare(_data, rhs._data, min_size);
+            return rs < 0 || rs == 0 && _size < rhs._size;
         }
 
     private:
-        pointer _begin = nullptr;
-        pointer _end = nullptr;
+        pointer _data = nullptr;
+        size_type _size = 0;
     };
 
     template <typename T>
