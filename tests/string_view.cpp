@@ -18,6 +18,7 @@ DOCTEST_TEST_CASE("string_view") {
 
     DOCTEST_SUBCASE("literal") {
         string_view literal = "literal";
+
         DOCTEST_CHECK(!literal.empty());
         DOCTEST_CHECK(literal);
         DOCTEST_CHECK_EQ(7, literal.size());
@@ -27,7 +28,7 @@ DOCTEST_TEST_CASE("string_view") {
     }
 
     DOCTEST_SUBCASE("length") {
-        string_view length{"length", 6};
+        constexpr string_view length{"length", 6};
 
         DOCTEST_CHECK_EQ(6, length.size());
     }
