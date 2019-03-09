@@ -68,6 +68,7 @@ if(LITEXX_BUILD_TESTS)
         tests/char_traits.cpp
         tests/main.cpp
         tests/string_view.cpp
+        tests/type_traits.cpp
     )
 	target_link_libraries(litexx_tests litexx doctest)
 	add_test(litexx_tests litexx_tests)
