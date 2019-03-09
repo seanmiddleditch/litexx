@@ -49,6 +49,42 @@ namespace litexx {
 
     template <bool C, typename R = void>
     using enable_if_t = typename enable_if<C, R>::type;
+
+    template <typename T>
+    struct remove_cv { using type = T; };
+
+    template <typename T>
+    struct remove_cv<T const> { using type = T; };
+
+    template <typename T>
+    struct remove_cv<T volatile> { using type = T; };
+
+    template <typename T>
+    struct remove_cv<T const volatile> { using type = T; };
+
+    template <typename T>
+    using remove_cv_t = typename remove_cv<T>::type;
+
+    template <typename T>
+    struct remove_reference { using type = T; };
+
+    template <typename T>
+    struct remove_reference<T&> { using type = T; };
+
+    template <typename T>
+    using remove_reference_t = typename remove_reference<T>::type;
+
+    template <typename T>
+    using remove_cvref_t = remove_cv_t<remove_reference_t<T>>;
+
+    template <typename T, typename U>
+    struct is_same { static constexpr bool value = false; };
+
+    template <typename T>
+    struct is_same<T, T> { static constexpr bool value = true; };
+
+    template <typename T, typename U>
+    static constexpr bool is_same_v = is_same<T, U>::value;
 }
 
 #endif // !defined(_guard_LITEXX_TYPE_TRAITS_H)
