@@ -89,7 +89,7 @@ namespace litexx {
         constexpr bool operator<(basic_string_view rhs) const noexcept {
             size_type min_size = _size < rhs._size ? _size : _size;
             int rs = litexx::char_traits<T>::compare(_data, rhs._data, min_size);
-            return rs < 0 || rs == 0 && _size < rhs._size;
+            return rs < 0 || (rs == 0 && _size < rhs._size);
         }
 
     private:
