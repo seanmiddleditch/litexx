@@ -57,8 +57,8 @@ DOCTEST_TEST_CASE("string_view") {
         std::string str = "abc";
         std::string_view sv = str;
 
-        static_assert(_detail::is_string_v<std::string>);
-        static_assert(_detail::is_string_v<std::string_view>);
+        static_assert(_detail::is_string_v<char, std::string>);
+        static_assert(_detail::is_string_v<char, std::string_view>);
 
         basic_string_view<char> bv(str);
         basic_string_view<char> bv2(sv);

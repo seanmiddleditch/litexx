@@ -37,14 +37,16 @@
 
 namespace litexx {
     namespace _detail {
-        template <typename, typename = void>
+        template <typename, typename, typename = void>
         struct has_string_members { static constexpr bool value = false; };
 
-        template <typename T>
-        struct has_string_members<T, void_t<decltype(declval<T>().data()), decltype(declval<T>().size())>> { static constexpr bool value = true; };
+        template <typename C, typename T>
+        struct has_string_members<C, T, void_t<decltype(declval<T>().data()), decltype(declval<T>().size())>> {
+            static constexpr bool value = std::is_convertible_v<decltype(declval<T>().data()), C const*>;
+        };
 
-        template <typename T>
-        constexpr bool is_string_v = has_string_members<T>::value;
+        template <typename C, typename T>
+        constexpr bool is_string_v = has_string_members<C, T>::value;
     }
 
     template <typename T>
@@ -60,7 +62,7 @@ namespace litexx {
         constexpr basic_string_view(pointer nstr, size_type size) noexcept : _data(nstr), _size(size) {}
         constexpr basic_string_view(pointer zstr) noexcept : _data(zstr), _size(zstr != nullptr ? litexx::char_traits<T>::length(zstr) : 0) {}
 
-        template <typename S, typename = enable_if_t<_detail::is_string_v<S>>>
+        template <typename S, typename = enable_if_t<_detail::is_string_v<T, S>>>
         constexpr basic_string_view(S const& str) noexcept : _data(str.data()), _size(str.size()) {}
 
         constexpr pointer data() const noexcept { return _data; }
